@@ -1,0 +1,17 @@
+.DS_Store
+build
+.git
+*.egg-info
+dist
+backup
+weights/*.weights
+__pycache__
+cv2test.py
+new_cv_detect.py
+.idea
+logs/*.*
+model_trained/*.pth
+vedio_samples/*.mp4
+output/samples
+data/Annotations/*.xml
+data/images/*.*

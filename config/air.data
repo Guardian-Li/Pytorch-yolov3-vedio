@@ -1,0 +1,6 @@
+classes=4
+train=data/train.txt
+valid=data/test.txt
+names=data/air.names
+backup=backup/
+
