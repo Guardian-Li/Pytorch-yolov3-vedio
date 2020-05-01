@@ -24,9 +24,9 @@ from matplotlib.ticker import NullLocator
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--image_folder", type=str, default="data/samples", help="path to dataset")
-    parser.add_argument("--model_def", type=str, default="config/liscens.cfg", help="path to model definition file")
-    parser.add_argument("--weights_path", type=str, default="checkpoints/yolov3_ckpt_19.pth", help="path to weights file")
-    parser.add_argument("--class_path", type=str, default="data/liscens.names", help="path to class label file")
+    parser.add_argument("--model_def", type=str, default="config/ptsc.cfg", help="path to model definition file")
+    parser.add_argument("--weights_path", type=str, default="model_trained/ptsc-280-epoch.pth", help="path to weights file")
+    parser.add_argument("--class_path", type=str, default="data/ptsc.names", help="path to class label file")
     parser.add_argument("--conf_thres", type=float, default=0.8, help="object confidence threshold")
     parser.add_argument("--nms_thres", type=float, default=0.4, help="iou thresshold for non-maximum suppression")
     parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
@@ -50,7 +50,10 @@ if __name__ == "__main__":
         # Load checkpoint weights
         model.load_state_dict(torch.load(opt.weights_path))
 
-    model.eval()  # Set in evaluation mode
+    model.eval()
+
+
+
 
     dataloader = DataLoader(
         ImageFolder(opt.image_folder, img_size=opt.img_size),
@@ -76,6 +79,8 @@ if __name__ == "__main__":
         with torch.no_grad():
             detections = model(input_imgs)
             detections = non_max_suppression(detections, opt.conf_thres, opt.nms_thres)
+        print(detections)
+
 
         # Log progress
         current_time = time.time()
