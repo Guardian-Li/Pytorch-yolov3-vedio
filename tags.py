@@ -6,7 +6,10 @@ from os.path import join
 
 sets = ['train', 'test']
 
-classes = ['bicycle', 'car','bus','person']
+classes = ['bicycle',
+'car',
+'person'
+]
 
 def convert(size, box):
     dw = 1. / size[0]

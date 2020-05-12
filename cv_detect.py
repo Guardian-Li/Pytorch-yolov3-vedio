@@ -21,12 +21,16 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.ticker import NullLocator
 
+
+
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--image_folder", type=str, default="data/samples", help="path to dataset")
-    parser.add_argument("--model_def", type=str, default="config/ptsc.cfg", help="path to model definition file")
-    parser.add_argument("--weights_path", type=str, default="model_trained/ptsc-280-epoch.pth", help="path to weights file")
-    parser.add_argument("--class_path", type=str, default="data/ptsc.names", help="path to class label file")
+    parser.add_argument("--model_def", type=str, default="config/liscens.cfg", help="path to model definition file")
+    parser.add_argument("--weights_path", type=str, default="model_trained/car_num.pth", help="path to weights file")
+    parser.add_argument("--class_path", type=str, default="data/liscens.names", help="path to class label file")
     parser.add_argument("--conf_thres", type=float, default=0.8, help="object confidence threshold")
     parser.add_argument("--nms_thres", type=float, default=0.4, help="iou thresshold for non-maximum suppression")
     parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
@@ -110,15 +114,19 @@ if __name__ == "__main__":
 
             for x1, y1, x2, y2, conf, cls_conf, cls_pred in detections:
                 #print("\t+ Label: %s, Conf: %.5f" % (classes[int(cls_pred)], cls_conf.item()))
-                print(x1,y1)
+                #print(x1,y1)
                 box_w = x2 - x1
                 box_h = y2 - y1
                 color = [int(c) for c in colors[int(cls_pred)]]
                 bbox = cv2.rectangle(cimg, (x1, y1 + box_h), (x2, y1), color, 2)
+                print(classes[int(cls_pred)])
+
                 cv2.putText(bbox, classes[int(cls_pred)], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
                 cv2.putText(bbox, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
             #cv2.imshow("new", cimg)
             #cv2.waitKey(0)
         filename = path.split("/")[-1].split(".")[0]
+
         print(filename)
+
         cv2.imwrite("./output/" + filename + ".jpg", bbox)

@@ -53,12 +53,12 @@ def changeRGB2BGR(img):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--image_folder", type=str, default="data/samples", help="path to dataset")
-    parser.add_argument("--vedio_file", type=str, default="vedio_samples/rzdf.mp4", help="path to dataset")
+    parser.add_argument("--vedio_file", type=str, default="vedio_samples/video-01.mp4", help="path to dataset")
     parser.add_argument("--model_def", type=str, default="config/ptsc.cfg", help="path to model definition file")
-    parser.add_argument("--weights_path", type=str, default="model_trained/ptsc-280-epoch.pth", help="path to weights file")
+    parser.add_argument("--weights_path", type=str, default="model_trained/ptsc-new-50-epoch.pth", help="path to weights file")
     parser.add_argument("--class_path", type=str, default="data/ptsc.names", help="path to class label file")
     parser.add_argument("--conf_thres", type=float, default=0.8, help="object confidence threshold")
-    parser.add_argument("--nms_thres", type=float, default=0.4, help="iou thresshold for non-maximum suppression")
+    parser.add_argument("--nms_thres", type=float, default=0.1, help="iou thresshold for non-maximum suppression")
     parser.add_argument("--batch_size", type=int, default=1, help="size of the batches")
     parser.add_argument("--n_cpu", type=int, default=3, help="number of cpu threads to use during batch generation")
     parser.add_argument("--img_size", type=int, default=416, help="size of each image dimension")
@@ -73,7 +73,6 @@ if __name__ == "__main__":
     else:
         # Load checkpoint weights
         model.load_state_dict(torch.load(opt.weights_path))
-    model.cuda()
     model.eval()  # Set in evaluation mode
     classes = load_classes(opt.class_path)
     Tensor = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
@@ -82,19 +81,35 @@ if __name__ == "__main__":
     colors = np.random.randint(0, 255, size=(len(classes), 3), dtype="uint8")
     a=[]
     time_begin = time.time()
+    NUM = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+    #NUM=0
     while cap.isOpened():
         ret, img = cap.read()
         if ret is False:
             break
-        NUM = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+        img = cv2.resize(img, (1280, 960), interpolation=cv2.INTER_CUBIC)
+
         #PILimg = np.array(Image.fromarray(cv2.cvtColor(img,cv2.COLOR_BGR2RGB)))
         #imgTensor = transforms.ToTensor()(PILimg)
+        #基于pytorch的yolov3 从github拉的
+        # yolov3如何改进成可以对视频进行实时分析
+        #以下的代码可以在utils的文件里找到 是在data loader里面对数据进行处理的，那么也可以把代码直接复制过来用
+        #需要注意的是 PIL读取的图片是RGB的 这里的图片是BGR的 是opencv读取的
+        #进行转换
+        #转换使用自己写的函数
+        #前面的都很简单 都是从detect的代码复制过来的，加了一个打开视频cap
+        #然后有很多人的疑问就是代码直接拉过来不知道怎么改，不知道图片怎么改成张量
+        #但是这个img转化之后缺少一个维度
         RGBimg=changeBGR2RGB(img)
         imgTensor = transforms.ToTensor()(RGBimg)
         imgTensor, _ = pad_to_square(imgTensor, 0)
         imgTensor = resize(imgTensor, 416)
+        #需要用这个unsqueeze去转化
+        #是看了莫烦的机器学习想到的 结合报错信息
         imgTensor = imgTensor.unsqueeze(0)
         imgTensor = Variable(imgTensor.type(Tensor))
+        #下面再预测就可以了
+        #展示一下吧
 
         with torch.no_grad():
             detections = model(imgTensor)
@@ -123,6 +138,7 @@ if __name__ == "__main__":
             #print()
             #print()
         #cv2.putText(img,"Hello World!",(400,50),cv2.FONT_HERSHEY_PLAIN,2.0,(0,0,255),2)
+
         cv2.imshow('frame', changeRGB2BGR(RGBimg))
         #cv2.waitKey(0)
 

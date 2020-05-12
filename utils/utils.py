@@ -40,12 +40,6 @@ def letterbox_image(img, inp_dim):
     return canvas
 
 
-
-
-
-
-
-
 def to_cpu(tensor):
     return tensor.detach().cpu()
 

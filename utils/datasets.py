@@ -44,6 +44,7 @@ class ImageFolder(Dataset):
     def __getitem__(self, index):
         img_path = self.files[index % len(self.files)]
         # Extract image as PyTorch tensor
+        #这里是如何进行转换图片到Tensor
         img = transforms.ToTensor()(Image.open(img_path))
         # Pad to square resolution
         img, _ = pad_to_square(img, 0)

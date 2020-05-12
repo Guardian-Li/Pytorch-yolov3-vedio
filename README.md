@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+<<<<<< HEAD
 ###Pytorch-yolov3
 ###增加了视频处理
 ###增加了opencv处理
