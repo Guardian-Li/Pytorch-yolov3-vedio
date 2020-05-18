@@ -121,7 +121,7 @@ if __name__ == "__main__":
                 box_h = y2 - y1
                 color = [int(c) for c in colors[int(cls_pred)]]
                 bbox = cv2.rectangle(cimg, (x1, y1 + box_h), (x2, y1), color, 2)
-                print(classes[int(cls_pred)])
+                #print(classes[int(cls_pred)])
                 if cls_pred != 0 :
                     car_num_single=(float(x1),float(y1) + box_h,classes[int(cls_pred)])
 

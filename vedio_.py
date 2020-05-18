@@ -53,9 +53,9 @@ def changeRGB2BGR(img):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--image_folder", type=str, default="data/samples", help="path to dataset")
-    parser.add_argument("--vedio_file", type=str, default="vedio_samples/video-01.mp4", help="path to dataset")
-    parser.add_argument("--model_def", type=str, default="config/ptsc.cfg", help="path to model definition file")
-    parser.add_argument("--weights_path", type=str, default="model_trained/ptsc-new-50-epoch.pth", help="path to weights file")
+    parser.add_argument("--vedio_file", type=str, default="vedio_samples/car.mp4", help="path to dataset")
+    parser.add_argument("--model_def", type=str, default="config/yolov3.cfg", help="path to model definition file")
+    parser.add_argument("--weights_path", type=str, default="model_trained/car_yolov3.pth", help="path to weights file")
     parser.add_argument("--class_path", type=str, default="data/ptsc.names", help="path to class label file")
     parser.add_argument("--conf_thres", type=float, default=0.8, help="object confidence threshold")
     parser.add_argument("--nms_thres", type=float, default=0.1, help="iou thresshold for non-maximum suppression")
