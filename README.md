@@ -1,3 +1,9 @@
+##Update 
+###Vedio.py oop
+
+
+
+
 ## pytorch-yolov3 vedio detect
 ### how to use
 it's same with [yolov3-pytorch](https://github.com/eriklindernoren/PyTorch-YOLOv3)
